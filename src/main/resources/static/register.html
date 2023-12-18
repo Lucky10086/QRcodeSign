@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>register</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src="js/script.js"></script>
+</head>
+<body>
+<div class="tl_first_wrap_O-7cj">
+  <a id="logo_mfe_top_nfes" data-ubt-key="PC_head_logo_click" style="text-align: center"
+     title="在线签到系统"  assist-speak-text="true"
+     assist-speak-text-pspeak="true" class="tl">在线签到系统
+  </a>
+  <h1  itemprop="description" style="text-align: center"> 教师注册</h1>
+</div>
+<div id="app">
+  <div class="control">
+    <div class="item">
+      <div>登录</div><div class="active">注册</div>
+    </div>
+    <div class="content">
+      <div style="display: block;">
+        <p>用户名</p>
+        <input type="text" placeholder="account" v-model="teacher.account"/>
+        <p>密码</p>
+        <input id="password" type="password" placeholder="password" v-model="teacher.password"/>
+        <p>确认密码</p>
+        <input id="repassword" type="password" placeholder="repassword" v-model="repassword"/>
+        <br/>
+        <input type="submit" value="注册" @click="register"/>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="js/axios-0.18.0.js"></script>
+<script src="js/vue.js"></script>
+<script>
+    new Vue({
+      el:"#app",
+      data(){
+        return{
+          teacher:{account:'',password:''},
+          repassword:''
+        }
+      },
+      methods:{
+          register(){
+              // if ((this.teacher.account != null) && (this.teacher.password != null)&& (this.repassword != null)){
+            //此方法不行，会出现判断异常无法判断为空对象因为是""所有不是空对象
+            //使用Object.keys()方法，返回对象的属性名组成的一个数组，若长度为0，则返回空对象(ES6写法)
+                if ((Object.keys(this.teacher.account).length != 0) && (Object.keys(this.teacher.password).length != 0)&& (Object.keys(this.repassword).length != 0)){
+                console.log(this.teacher)
+                if(this.teacher.password != this.repassword){
+                    alert("两次密码不一致！")
+                }else{
+                  var _this = this;
+                    axios({
+                        method:'post',
+                        url:"http://192.168.189.182:8080/authorizations",
+                        data:_this.teacher
+                    }).then(function (res){
+                      if(res.data.flag == true){
+                        alert("注册成功！确认即可跳转到登录界面")
+                        document.location.href = 'http://192.168.189.182:8080/index.html'
+                      }
+                      else {
+                        alert("注册失败，账户重复！")
+                      }
+                    })
+                }
+              }else{
+                alert("账号密码不能为空！")
+              }
+          }
+      }
+    })
+</script>
+</body>
+</html>

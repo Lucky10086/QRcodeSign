@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .el-table .warning-row {
+            background: oldlace;
+        }
+
+        .el-table .success-row {
+            background: #f0f9eb;
+        }
+    </style>
+
+</head>
+<body>
+<div id="app">
+    <template>
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="班级管理" name="first">班级管理</el-tab-pane>
+            <el-tab-pane label="发起签到" name="second">发起签到</el-tab-pane>
+            <el-tab-pane label="签到统计" name="third">签到统计</el-tab-pane>
+        </el-tabs>
+    </template>
+    <div id="stu_info">
+        <el-form :inline="true" class="demo-form-inline">
+            <el-form-item>
+                <el-input v-model="select.sclass" placeholder="班级"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-input v-model="select.sname" placeholder="姓名"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-input v-model="select.sgender" placeholder="性别"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-input v-model="select.sno" placeholder="学号"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="selectByConditions">查询</el-button>
+            </el-form-item>
+        </el-form>
+
+
+
+        <el-dialog
+                title="创建班级"
+                :visible.sync="dialogVisible"
+                width="30%"
+                >
+            <span><el-input placeholder="请输入班级名称" v-model="createclassname"></el-input></span>
+            <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="creating">确 定</el-button></span>
+        </el-dialog>
+
+
+
+
+        <el-button type="primary" @click="createClass">创建班级</el-button>
+
+
+
+
+        <el-dialog title="添加学生" :visible.sync="dialogFormVisible">
+            <el-form>
+                <el-form-item >
+                    <el-input autocomplete="off" placeholder="学号" v-model="student.sno"></el-input>
+                </el-form-item>
+                <el-form-item >
+                    <el-input autocomplete="off" placeholder="姓名" v-model="student.sname"></el-input>
+                </el-form-item>
+                <el-form-item >
+                    <el-input autocomplete="off" placeholder="性别" v-model="student.sgender"></el-input>
+                </el-form-item>
+                <template>
+                    <el-select v-model="student.sclass" placeholder="请选择">
+                        <el-option
+                                v-for="item in datas"
+                                :label="item.sclass"
+                                :value="item.sclass">
+                        </el-option>
+                    </el-select>
+                </template>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="creatingStu" :visible.sync="dialogFormVisible">确 定</el-button>
+            </div>
+        </el-dialog>
+
+        <el-button type="primary" @click="createStu">添加学生</el-button>
+
+
+
+
+    <template>
+        <el-table
+                :data="tableData_stu"
+                style="width: 100%">
+            <el-table-column
+                    prop="sno"
+                    label="学号"
+                    >
+            </el-table-column>
+            <el-table-column
+                    prop="sname"
+                    label="姓名"
+                    >
+            </el-table-column>
+            <el-table-column
+                    prop="sgender"
+                    label="性别"
+                    >
+            </el-table-column>
+            <el-table-column
+                    prop="sclass"
+                    label="班级"
+                    >
+            </el-table-column>
+            <el-table-column
+                    fixed="right"
+                    label="操作"
+                    width="100">
+                <template slot-scope="scope">
+                    <el-button @click="del(scope.row)" type="text" size="small">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        </el-table>
+    </template>
+</div>
+    <div id="pubsign">
+        <br/>
+        <template>
+            <el-select v-model="value" placeholder="请选择班级">
+                <el-option
+                        v-for="item in datas"
+                        :key="item.sclass"
+                        :label="item.sclass"
+                        :value="item.sclass">
+                </el-option>
+            </el-select>
+            <el-button type="primary" @click="start">开始签到</el-button>
+            <el-button type="danger" @click="abort">结束签到</el-button>
+        </template>
+    </div>
+    <div id="statist">
+        <template>
+            <br/>
+            <el-button type="primary" @click="allsigned">显示所有</el-button>
+            <el-button type="primary" @click="signed">已签到</el-button>
+            <el-button type="primary" @click="unsigned">未签到</el-button>
+            <br/>
+            <br/>
+            <hr/>
+            <br/>
+            <br/>
+            <el-select v-model="value" placeholder="请选择班级">
+                <el-option
+                        v-for="item in datas"
+                        :key="item.sclass"
+                        :label="item.sclass"
+                        :value="item.sclass">
+                </el-option>
+            </el-select>
+            <el-button type="primary" @click="allsignByClass">显示班级所有学生</el-button>
+            <el-button type="primary" @click="setCondtionSigned">显示班级签到学生</el-button>
+            <el-button type="primary" @click="setCondtionUnsigned">显示班级未签到学生</el-button>
+            <br/>
+            <el-table
+                    :data="tableData_sign"
+                    style="width: 100%">
+                <el-table-column
+                        prop="sno"
+                        label="学号"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="sname"
+                        label="姓名"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="sgender"
+                        label="性别"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="sclass"
+                        label="班级"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="status"
+                        label="签到状态"
+                >
+                </el-table-column>
+            </el-table>
+        </template>
+    </div>
+</div>
+
+
+<script src="js/vue.js"></script>
+<script src="js/element-ui/lib/index.js"></script>
+<script src="js/axios-0.18.0.js"></script>
+<link rel="stylesheet" href="js/element-ui/lib/theme-chalk/index.css">
+
+<script>
+    window.onload = function (){
+            document.getElementById("stu_info").style.display="block";
+            document.getElementById("pubsign").style.display="none";
+            document.getElementById("statist").style.display="none";
+    }
+    new Vue({
+        el: "#app",
+
+        data() {
+            return {
+
+
+                classCondition:'',
+
+
+                student:{
+                    sno:'',
+                    sname:'',
+                    sgender:'',
+                    sclass:''
+                },
+
+
+
+                dialogVisible: false,
+                dialogFormVisible:false,
+
+                createclassname:'',
+
+
+                select:{
+                    sgender:'',
+                    sname:'',
+                    sno:'',
+                    sclass:''},
+
+
+                activeName: 'first',
+                tableData_stu:[],
+                tableData_sign:[],
+
+
+                datas:[
+                    {sclass: '',id:''}],
+                value:''
+            }
+        },
+        mounted(){
+            let _this = this
+            axios({
+                method:"get",
+                url:"http://192.168.189.182:8080/manages"
+            }).then(function (res){
+                _this.tableData_stu = res.data.data
+            })
+            axios({
+                method:"get",
+                url:"http://192.168.189.182:8080/manages/class"
+            }).then(function (res){
+                _this.datas=res.data.data
+            })
+            axios({
+                method:'get',
+                url:'http://192.168.189.182:8080/manages/getAllsign'
+            }).then(function (res){
+                _this.tableData_sign = res.data.data
+            })
+        },
+
+        methods: {
+            allStudents(){
+                let _this = this
+                axios({
+                    method:"get",
+                    url:"http://192.168.189.182:8080/manages"
+                }).then(function (res){
+                    _this.tableData_stu = res.data.data
+                })
+            },
+
+
+            setCondtionSigned(){
+                this.classCondition = "signed"
+                this.allsignByClass()
+            },
+            setCondtionUnsigned(){
+                this.classCondition = "unsigned"
+                this.allsignByClass()
+            },
+
+            allsignByClass(){
+                let _this = this;
+                _this.classCondition = ''
+                axios({
+                    method:"get",
+                    url:"http://192.168.189.182:8080/manages/allsignbynlassname",
+                    params:{
+                        sclass : _this.value,
+                        condition : _this.classCondition
+                    }
+                    }).then(function (res){
+                    _this.tableData_sign = res.data.data
+                })
+            },
+
+
+
+
+            allsigned(){
+                this.classCondition = ''
+                let _this = this
+                axios({
+                    method:'get',
+                    url:'http://192.168.189.182:8080/manages/signed',
+                    params:{
+                        condition:"All"
+                    }
+                }).then(function (res){
+                    _this.tableData_sign = res.data.data
+                })
+            },
+
+
+
+            signed(){
+                let _this = this
+                axios({
+                    method:'get',
+                    url:'http://192.168.189.182:8080/manages/signed',
+                    params:{
+                        condition:"signed"
+                    }
+                }).then(function (res){
+                    _this.tableData_sign = res.data.data
+                })
+            },
+
+            unsigned(){
+                let _this = this
+                axios({
+                    method:'get',
+                    url:'http://192.168.189.182:8080/manages/signed',
+                    params:{
+                        condition:"unsigned"
+                    }
+                }).then(function (res){
+                    _this.tableData_sign = res.data.data
+                })
+            },
+
+
+
+            creatingStu(){
+                if( this.student.sno.trim() != '' &&
+                    this.student.sname.trim() != '' &&
+                    this.student.sgender.trim() != '' &&
+                    this.student.sclass.trim() != ''
+                ){
+                    let _this = this
+                    axios({
+                        method:"post",
+                        url:"http://192.168.189.182:8080/manages/addStu",
+                        data:_this.student
+                    }).then(function (res){
+                        console.log(res.data.flag)
+                        if(res.data.flag == true){
+                            _this.dialogFormVisible = false
+                            _this.allStudents()
+                        }
+                    })
+                }
+            },
+
+
+
+            createStu(){
+                this.dialogFormVisible = true
+            },
+
+
+
+            del(row) {
+                var _this = this;
+                // console.log(row)
+                if(row.sno != undefined){
+                    axios({
+                        method:"delete",
+                        url:"http://192.168.189.182:8080/manages/delete",
+                        params:{
+                            sno:row.sno
+                        }
+                    }).then(function (res){
+                        alert("删除成功！")
+                        _this.selectByConditions()
+                    })
+                }
+            },
+
+            queryClass(){
+                let _this = this
+                axios({
+                    method:"get",
+                    url:"http://192.168.189.182:8080/manages/class"
+                }).then(function (res){
+                    _this.datas=res.data.data
+                })
+            },
+
+
+            creating() {
+                let _this = this
+                if ((this.createclassname = this.createclassname.trim())) {
+                    axios({
+                        method: "get",
+                        url: "http://192.168.189.182:8080/manages/create",
+                        params: {
+                            createclassname: _this.createclassname
+                        }
+                    }).then(function (res) {
+                        if (res.data.flag!=false) {
+                            alert("创建成功")
+                            _this.dialogVisible = false
+                            _this.queryClass()
+                        }else{
+                            alert("创建失败,提供班级参数错误！")
+                        }
+                    })
+                }else{
+                    alert("班级名称不可为空")
+                }
+            },
+
+
+
+            createClass(){
+                this.createclassname = "";
+                this.dialogVisible = true
+            },
+
+
+            selectByConditions(){
+                let _this = this;
+                axios({
+                    method:"get",
+                    url:"http://192.168.189.182:8080/manages/select",
+                    params:{
+                        sname:_this.select.sname,
+                        sno:_this.select.sno,
+                        sgender:_this.select.sgender,
+                        sclass:_this.select.sclass
+                    }
+                }).then(function (res){
+                    _this.tableData_stu = res.data.data
+                })
+            },
+
+
+            handleClick(tab) {
+                document.getElementById("stu_info").style.display="none";
+                document.getElementById("pubsign").style.display="none";
+                document.getElementById("statist").style.display="none";
+                if (tab.index == 0) {
+                    document.getElementById("stu_info").style.display="block";
+                }
+                if (tab.index == 1) {
+                    document.getElementById("pubsign").style.display="block";
+                }
+                if (tab.index == 2) {
+                    document.getElementById("statist").style.display="block";
+                }
+            },
+
+
+            start() {
+                let qrurl='http://192.168.189.182:8080/sign.html'
+                let sclass = this.value
+                let _this = this
+                if((sclass = sclass.trim())) {
+                    window.open('http://192.168.189.182:8080/manages/qrcode?content=' + qrurl + '&sclass=' + sclass, '_blank')
+                    axios({
+                        method: 'get',
+                        url: 'http://192.168.189.182:8080/manages/getsign'
+                    }).then(function (res) {
+                        _this.tableData_sign = res.data.data
+                    })
+                    this.$message({
+                        message: '发起签到成功',
+                        type: 'success'
+                    });
+                }
+                else{
+                    this.$message({
+                        message: '班级不能为空！',
+                        type: 'warning'
+                    });
+                }
+            },
+            abort() {
+                let _this = this
+                if (this.value.trim() == '') {
+                    this.$message({
+                        message: '班级不可为空！',
+                        type: 'error'
+                    })
+                } else {
+                    axios({
+                        method: 'get',
+                        url: 'http://192.168.189.182:8080/manages/abortsign',
+                        params: {
+                            sclass: _this.value
+                        }
+                    }).then(function (res) {
+                        if (res.data.flag != true) {
+                            _this.$message({
+                                message: '班级已结束签到！',
+                                type: 'error'
+                            });
+                        } else {
+                            _this.$message({
+                                message: '结束签到成功',
+                                type: 'warning'
+                            });
+                        }
+                    })
+                }
+            }
+        }
+    })
+</script>
+
+</body>
+</html>

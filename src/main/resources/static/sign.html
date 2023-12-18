@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <el-input v-model="student.sno" placeholder="请输入学号"></el-input>
+<!--    <el-input v-model="student.sclass" placeholder="请输入班级"></el-input>-->
+    <el-select v-model="sclass" placeholder="请选择班级">
+        <el-option
+                v-for="item in datas"
+                :key="item.sclass"
+                :label="item.sclass"
+                :value="item.sclass">
+        </el-option>
+    </el-select>
+    <el-button type="primary" @click="sign">签到</el-button>
+</div>
+
+<script src="js/vue.js"></script>
+<script src="js/element-ui/lib/index.js"></script>
+<script src="js/axios-0.18.0.js"></script>
+<link rel="stylesheet" href="js/element-ui/lib/theme-chalk/index.css">
+<script>
+  new Vue({
+    el:"#app",
+
+      data(){
+          return{
+              student:{sno:'',sclass:''},
+              datas:[{sclass: '',id:''}],
+              sclass:''
+          }
+      },
+
+      mounted(){
+          let _this = this
+          axios({
+              method:"get",
+              url:"http://192.168.189.182:8080/manages/class"
+          }).then(function (res){
+              _this.datas=res.data.data
+          })
+      },
+    methods:{
+        sign(){
+            // console.log(this.student)
+            // console.log(this.sclass)
+            if (this.student!=null){
+                // console.log("inner")
+                let _this = this
+                axios({
+                    method:"get",
+                    url:"http://192.168.189.182:8080/manages/sign",
+                    params:{
+                        sno:_this.student.sno,
+                        sclass:_this.sclass
+                    }
+                }).then(function (res){
+                    _this.$message({
+                        message:res.data.data
+                    })
+                })
+            }
+        }
+    }
+  })
+</script>
+
+</body>
+</html>

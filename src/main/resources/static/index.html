@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>login</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src="js/script.js"></script>
+</head>
+<body>
+<div class="title">
+  <h1  itemprop="description" style="text-align: center"> 教师登录</h1>
+</div>
+<div id="app">
+  <div class="control">
+    <div class="item">
+      <div class="active">登录</div><div>注册</div>
+    </div>
+    <div class="content">
+      <div style="display: block;">
+        <p>账号</p>
+        <input id="account" type="text" placeholder="account" v-model="teacher.account"/>
+        <p>密码</p>
+        <input id="password" type="password" placeholder="password" v-model="teacher.password"/>
+        <br/>
+        <input type="submit" value="登录" @click="login"/>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+
+<script src="js/vue.js"></script>
+<script src="js/axios-0.18.0.js"></script>
+<script>
+  new Vue({
+    el:"#app",
+    data(){
+        return{
+          teacher:{account:'',password:''}
+        }
+    },
+    methods:{
+      login(){
+        if ((Object.keys(_this.teacher.account).length == 0) || (Object.keys(_this.teacher.password).length == 0)) {
+          alert("请准确输入账户密码，账户密码不得为空！")
+        }else{
+          var _this = this;
+          var u = 'http://192.168.189.182:8080/authorizations/'+ _this.teacher.account + '/' + _this.teacher.password;
+          console.log(u)
+          if(this.teacher.account != null && this.teacher.password != null)
+            axios({
+              method:'get',
+              url:u
+            }).then(function (res){
+              if(res.data.flag == false){
+                alert("账户或密码错误！")
+              }
+              else{
+                // alert("登陆成功！")
+                document.location.href = 'http://192.168.189.182:8080/manage.html'
+              }
+            })
+        }
+        }
+    }
+  })
+</script>
+</body>
+</html>
