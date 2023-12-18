@@ -39,7 +39,7 @@
           let _this = this
           axios({
               method:"get",
-              url:"http://192.168.189.182:8080/manages/class"
+              url:"http://192.168.137.1:8080/manages/class"
           }).then(function (res){
               _this.datas=res.data.data
           })
@@ -53,7 +53,7 @@
                 let _this = this
                 axios({
                     method:"get",
-                    url:"http://192.168.189.182:8080/manages/sign",
+                    url:"http://192.168.137.1:8080/manages/sign",
                     params:{
                         sno:_this.student.sno,
                         sclass:_this.sclass

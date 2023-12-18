@@ -57,12 +57,12 @@
                   var _this = this;
                     axios({
                         method:'post',
-                        url:"http://192.168.189.182:8080/authorizations",
+                        url:"http://192.168.137.1:8080/authorizations",
                         data:_this.teacher
                     }).then(function (res){
                       if(res.data.flag == true){
                         alert("注册成功！确认即可跳转到登录界面")
-                        document.location.href = 'http://192.168.189.182:8080/index.html'
+                        document.location.href = 'http://192.168.137.1:8080/index.html'
                       }
                       else {
                         alert("注册失败，账户重复！")

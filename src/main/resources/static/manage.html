@@ -260,19 +260,19 @@
             let _this = this
             axios({
                 method:"get",
-                url:"http://192.168.189.182:8080/manages"
+                url:"http://192.168.137.1:8080/manages"
             }).then(function (res){
                 _this.tableData_stu = res.data.data
             })
             axios({
                 method:"get",
-                url:"http://192.168.189.182:8080/manages/class"
+                url:"http://192.168.137.1:8080/manages/class"
             }).then(function (res){
                 _this.datas=res.data.data
             })
             axios({
                 method:'get',
-                url:'http://192.168.189.182:8080/manages/getAllsign'
+                url:'http://192.168.137.1:8080/manages/getAllsign'
             }).then(function (res){
                 _this.tableData_sign = res.data.data
             })
@@ -283,7 +283,7 @@
                 let _this = this
                 axios({
                     method:"get",
-                    url:"http://192.168.189.182:8080/manages"
+                    url:"http://192.168.137.1:8080/manages"
                 }).then(function (res){
                     _this.tableData_stu = res.data.data
                 })
@@ -304,7 +304,7 @@
                 _this.classCondition = ''
                 axios({
                     method:"get",
-                    url:"http://192.168.189.182:8080/manages/allsignbynlassname",
+                    url:"http://192.168.137.1:8080/manages/allsignbynlassname",
                     params:{
                         sclass : _this.value,
                         condition : _this.classCondition
@@ -322,7 +322,7 @@
                 let _this = this
                 axios({
                     method:'get',
-                    url:'http://192.168.189.182:8080/manages/signed',
+                    url:'http://192.168.137.1:8080/manages/signed',
                     params:{
                         condition:"All"
                     }
@@ -337,7 +337,7 @@
                 let _this = this
                 axios({
                     method:'get',
-                    url:'http://192.168.189.182:8080/manages/signed',
+                    url:'http://192.168.137.1:8080/manages/signed',
                     params:{
                         condition:"signed"
                     }
@@ -350,7 +350,7 @@
                 let _this = this
                 axios({
                     method:'get',
-                    url:'http://192.168.189.182:8080/manages/signed',
+                    url:'http://192.168.137.1:8080/manages/signed',
                     params:{
                         condition:"unsigned"
                     }
@@ -370,7 +370,7 @@
                     let _this = this
                     axios({
                         method:"post",
-                        url:"http://192.168.189.182:8080/manages/addStu",
+                        url:"http://192.168.137.1:8080/manages/addStu",
                         data:_this.student
                     }).then(function (res){
                         console.log(res.data.flag)
@@ -396,7 +396,7 @@
                 if(row.sno != undefined){
                     axios({
                         method:"delete",
-                        url:"http://192.168.189.182:8080/manages/delete",
+                        url:"http://192.168.137.1:8080/manages/delete",
                         params:{
                             sno:row.sno
                         }
@@ -411,7 +411,7 @@
                 let _this = this
                 axios({
                     method:"get",
-                    url:"http://192.168.189.182:8080/manages/class"
+                    url:"http://192.168.137.1:8080/manages/class"
                 }).then(function (res){
                     _this.datas=res.data.data
                 })
@@ -423,7 +423,7 @@
                 if ((this.createclassname = this.createclassname.trim())) {
                     axios({
                         method: "get",
-                        url: "http://192.168.189.182:8080/manages/create",
+                        url: "http://192.168.137.1:8080/manages/create",
                         params: {
                             createclassname: _this.createclassname
                         }
@@ -453,7 +453,7 @@
                 let _this = this;
                 axios({
                     method:"get",
-                    url:"http://192.168.189.182:8080/manages/select",
+                    url:"http://192.168.137.1:8080/manages/select",
                     params:{
                         sname:_this.select.sname,
                         sno:_this.select.sno,
@@ -483,14 +483,14 @@
 
 
             start() {
-                let qrurl='http://192.168.189.182:8080/sign.html'
+                let qrurl='http://192.168.137.1:8080/sign.html'
                 let sclass = this.value
                 let _this = this
                 if((sclass = sclass.trim())) {
-                    window.open('http://192.168.189.182:8080/manages/qrcode?content=' + qrurl + '&sclass=' + sclass, '_blank')
+                    window.open('http://192.168.137.1:8080/manages/qrcode?content=' + qrurl + '&sclass=' + sclass, '_blank')
                     axios({
                         method: 'get',
-                        url: 'http://192.168.189.182:8080/manages/getsign'
+                        url: 'http://192.168.137.1:8080/manages/getsign'
                     }).then(function (res) {
                         _this.tableData_sign = res.data.data
                     })
@@ -516,7 +516,7 @@
                 } else {
                     axios({
                         method: 'get',
-                        url: 'http://192.168.189.182:8080/manages/abortsign',
+                        url: 'http://192.168.137.1:8080/manages/abortsign',
                         params: {
                             sclass: _this.value
                         }
