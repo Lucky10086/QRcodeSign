@@ -12,4 +12,5 @@ public class Sign {
     private String sgender;
     private String sclass;
     private String status;
+    private String ip;
 }

@@ -16,9 +16,9 @@
 </template>
 
 <script>
-  import draggable from '../draggable';
+import draggable from '../draggable';
 
-  export default {
+export default {
     name: 'el-sl-panel',
 
     props: {

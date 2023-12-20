@@ -39,16 +39,16 @@
 </template>
 
 <script>
-  import SvPanel from './sv-panel';
-  import HueSlider from './hue-slider';
-  import AlphaSlider from './alpha-slider';
-  import Predefine from './predefine';
-  import Popper from 'element-ui/src/utils/vue-popper';
-  import Locale from 'element-ui/src/mixins/locale';
-  import ElInput from 'element-ui/packages/input';
-  import ElButton from 'element-ui/packages/button';
+import SvPanel from './sv-panel';
+import HueSlider from './hue-slider';
+import AlphaSlider from './alpha-slider';
+import Predefine from './predefine';
+import Popper from 'element-ui/src/utils/vue-popper';
+import Locale from 'element-ui/src/mixins/locale';
+import ElInput from 'element-ui/packages/input';
+import ElButton from 'element-ui/packages/button';
 
-  export default {
+export default {
     name: 'el-color-picker-dropdown',
 
     mixins: [Popper, Locale],

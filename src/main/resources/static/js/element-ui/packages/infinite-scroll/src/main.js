@@ -1,13 +1,6 @@
 import throttle from 'throttle-debounce/debounce';
-import {
-  isHtmlElement,
-  isFunction,
-  isUndefined,
-  isDefined
-} from 'element-ui/src/utils/types';
-import {
-  getScrollContainer
-} from 'element-ui/src/utils/dom';
+import {isDefined, isFunction, isHtmlElement, isUndefined} from 'element-ui/src/utils/types';
+import {getScrollContainer} from 'element-ui/src/utils/dom';
 
 const getStyleComputedProperty = (element, property) => {
   if (element === window) {

@@ -11,6 +11,7 @@ import org.example.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -91,10 +92,12 @@ public class ManageController {
     }
 
     @GetMapping("/sign")
-    public Result sign(String sno, String sclass) {
+    public Result sign(String sno, String sclass, HttpServletRequest request) {
         if (className.contains(sclass)) {
-           //改sql语句
-            Boolean aBoolean = signService.updateSigned(sno);
+            //改sql语句
+            String signedIPAddress = request.getRemoteAddr();
+//            Boolean aBoolean = signService.updateSigned(sno);
+            boolean aBoolean = signService.trySign(sno,signedIPAddress);
             return new Result(aBoolean, aBoolean ? "签到成功！" : "签到失败");
         } else {
             return new Result(false, "学号不存在或所在班级未开启签到！");

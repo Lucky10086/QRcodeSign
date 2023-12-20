@@ -13,7 +13,7 @@ public class Teacher {
         this.account = account;
         this.password = password;
     }
-    public Teacher(){
 
+    public Teacher() {
     }
 }

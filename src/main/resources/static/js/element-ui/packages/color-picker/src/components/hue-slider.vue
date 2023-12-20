@@ -12,9 +12,9 @@
 </template>
 
 <script>
-  import draggable from '../draggable';
+import draggable from '../draggable';
 
-  export default {
+export default {
     name: 'el-color-hue-slider',
 
     props: {

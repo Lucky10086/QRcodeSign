@@ -1,11 +1,14 @@
 package org.example.config;
 
+import cn.hutool.extra.qrcode.QrConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import cn.hutool.extra.qrcode.QrConfig;
 
 import java.awt.*;
 
+/**
+ * @author zjy
+ */
 @Configuration
 public class QrCode {
         @Bean

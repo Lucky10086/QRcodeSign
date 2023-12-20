@@ -44,7 +44,7 @@
     },
     methods:{
       login(){
-        if ((Object.keys(_this.teacher.account).length == 0) || (Object.keys(_this.teacher.password).length == 0)) {
+        if ((Object.keys(this.teacher.account).length == 0) || (Object.keys(this.teacher.password).length == 0)) {
           alert("请准确输入账户密码，账户密码不得为空！")
         }else{
           var _this = this;
@@ -52,8 +52,9 @@
           console.log(u)
           if(this.teacher.account != null && this.teacher.password != null)
             axios({
-              method:'get',
-              url:u
+              method:'post',
+              url:"http://192.168.137.1:8080/authorizations/login",
+              data: _this.teacher
             }).then(function (res){
               if(res.data.flag == false){
                 alert("账户或密码错误！")

@@ -1,4 +1,5 @@
 import Vue from 'vue';
+
 let isDragging = false;
 
 export default function(element, options) {

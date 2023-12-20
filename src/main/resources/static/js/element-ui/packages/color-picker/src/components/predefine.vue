@@ -14,9 +14,9 @@
 </template>
 
 <script>
-  import Color from '../color';
+import Color from '../color';
 
-  export default {
+export default {
     props: {
       colors: { type: Array, required: true },
       color: { required: true }

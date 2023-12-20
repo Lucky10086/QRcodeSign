@@ -1,12 +1,10 @@
 package org.example.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.dao.SignDAO;
-import org.example.dao.StuClassDAO;
 import org.example.domain.Sign;
-import org.example.domain.StuClass;
 import org.example.service.SignService;
-import org.example.service.StuClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,5 +29,15 @@ public class SignServiceImpl extends ServiceImpl<SignDAO, Sign> implements SignS
     @Override
     public Boolean updateSigned(String sno) {
         return dao.updateSigned(sno);
+    }
+
+    @Override
+    public boolean trySign(String sno, String signedIPAddress) {
+
+        Sign sign = new Sign();
+        sign.setStatus("已签到");
+        sign.setIp(signedIPAddress);
+
+        return update(sign,new LambdaUpdateWrapper<Sign>().eq(Sign::getSno,sno));
     }
 }
