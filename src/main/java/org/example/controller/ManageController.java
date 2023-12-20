@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.example.config.ExeclFile;
 import org.example.domain.Result;
 import org.example.domain.Sign;
 import org.example.domain.Student;
@@ -10,6 +11,7 @@ import org.example.service.StuClassService;
 import org.example.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -85,6 +87,7 @@ public class ManageController {
         return new Result(save, null);
     }
 
+
     @GetMapping("/qrcode")
     public void generateV3(String content, String sclass, HttpServletResponse servletResponse) throws IOException {
         className.add(sclass);
@@ -97,7 +100,7 @@ public class ManageController {
             //改sql语句
             String signedIPAddress = request.getRemoteAddr();
 //            Boolean aBoolean = signService.updateSigned(sno);
-            boolean aBoolean = signService.trySign(sno,signedIPAddress);
+            boolean aBoolean = signService.trySign(sno, signedIPAddress);
             return new Result(aBoolean, aBoolean ? "签到成功！" : "签到失败");
         } else {
             return new Result(false, "学号不存在或所在班级未开启签到！");
@@ -148,5 +151,19 @@ public class ManageController {
                 .eq("unsigned".equals(condition), Sign::getStatus, "未签到");
         return new Result(true, signService.list(lqw));
     }
+    ExeclFile f;
+    @PostMapping("/importExcel")
+    public Result importExcel(@RequestParam("file") MultipartFile file) {
+        try{
+            // 处理导入excel的逻辑，将数据保存到数据库
+            f.importData(file);
+            return new Result(true, "导入成功");
+        }catch (Exception e)
+        {
+            return new Result(false, "导入失败");
+        }
+    }
+
 
 }
+
