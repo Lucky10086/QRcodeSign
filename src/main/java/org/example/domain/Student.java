@@ -2,7 +2,15 @@ package org.example.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+
+/**
+ * @author asd
+ */
+@Setter
+@Getter
 @Data
 @TableName("tb_student")
 public class Student {
@@ -30,35 +38,4 @@ public class Student {
         this.sclass = sclass;
     }
 
-    public String getSno() {
-        return sno;
-    }
-
-    public void setSno(String sno) {
-        this.sno = sno;
-    }
-
-    public String getSname() {
-        return sname;
-    }
-
-    public void setSname(String sname) {
-        this.sname = sname;
-    }
-
-    public String getSgender() {
-        return sgender;
-    }
-
-    public void setSgender(String sgender) {
-        this.sgender = sgender;
-    }
-
-    public String getSclass() {
-        return sclass;
-    }
-
-    public void setSclass(String sclass) {
-        this.sclass = sclass;
-    }
 }
