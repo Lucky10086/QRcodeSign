@@ -1,7 +1,9 @@
 package org.example.controller;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.context.AnalysisContext;
+import com.alibaba.excel.event.AnalysisEventListener;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.example.config.ExeclFile;
 import org.example.domain.Result;
 import org.example.domain.Sign;
 import org.example.domain.Student;
@@ -151,16 +153,37 @@ public class ManageController {
                 .eq("unsigned".equals(condition), Sign::getStatus, "未签到");
         return new Result(true, signService.list(lqw));
     }
-    ExeclFile f;
     @PostMapping("/importExcel")
-    public Result importExcel(@RequestParam("file") MultipartFile file) {
+    public Result importExcel(@RequestParam("file") MultipartFile file,HttpServletResponse response) throws Exception {
         try{
             // 处理导入excel的逻辑，将数据保存到数据库
-            f.importData(file);
+            importData(file);
             return new Result(true, "导入成功");
         }catch (Exception e)
         {
-            return new Result(false, "导入失败");
+            response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED,"导入错误！");
+            throw new Exception("导入错误!");
+        }
+    }
+    public void importData(MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
+            EasyExcel.read(file.getInputStream(), Student.class, new AnalysisEventListener<Student>() {
+                List<Student> list=new ArrayList<>();
+
+                @Override
+                public void invoke(Student stu, AnalysisContext analysisContext) {
+                    list.add(stu);
+                    System.out.println(stu);
+                }
+
+                @Override
+                public void doAfterAllAnalysed(AnalysisContext analysisContext) {
+                    service.saveBatch(list);
+                    System.out.println("解析结束");
+
+                }
+            }).sheet().doRead();
+
         }
     }
 

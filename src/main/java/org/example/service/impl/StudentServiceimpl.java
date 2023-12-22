@@ -10,10 +10,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class StudentServiceimpl extends ServiceImpl<StudentDAO, Student> implements StudentService {
 
-    @Autowired
-    private StudentDAO dao;
+
+    @Override
+    public String insertStudent(String sno, String sname, String sclass) {
+        String str = baseMapper.insertStu(sno,sname,"0",sclass);
+        return str;
+    }
+
     @Override
     public Boolean deleteStu(String sno) {
-        return  dao.deleteBySno(sno);
+        return  baseMapper.deleteBySno(sno);
     }
+
+
+
 }
