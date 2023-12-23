@@ -9,6 +9,8 @@ import org.example.domain.Student;
 public interface StudentService extends IService<Student> {
 
 
+    String insertStudent(String sno, String sname, String sclass);
+
     Boolean deleteStu(String sno);
 
 }

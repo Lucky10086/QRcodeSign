@@ -102,7 +102,7 @@ public class ManageController {
             //改sql语句
             String signedIPAddress = request.getRemoteAddr();
 //            Boolean aBoolean = signService.updateSigned(sno);
-            boolean aBoolean = signService.trySign(sno, signedIPAddress);
+            boolean aBoolean = signService.trySign(sno, sclass,signedIPAddress);
             return new Result(aBoolean, aBoolean ? "签到成功！" : "签到失败");
         } else {
             return new Result(false, "学号不存在或所在班级未开启签到！");
@@ -129,6 +129,9 @@ public class ManageController {
     @GetMapping("/abortsign")
     public Result abortSign(String sclass) {
         if (className.contains(sclass)) {
+
+            signService.resetStatusAndIpWhenAbortSign(sclass);
+
             className.remove(sclass);
             return new Result(true, null);
         } else {

@@ -39,7 +39,7 @@
           let _this = this
           axios({
               method:"get",
-              url:"http://192.168.137.1:8080/manages/class"
+              url:"http://192.168.189.119:8080/manages/class"
           }).then(function (res){
               _this.datas=res.data.data
           })
@@ -53,15 +53,23 @@
                 let _this = this
                 axios({
                     method:"get",
-                    url:"http://192.168.137.1:8080/manages/sign",
+                    url:"http://192.168.189.119:8080/manages/sign",
                     params:{
                         sno:_this.student.sno,
                         sclass:_this.sclass
                     }
                 }).then(function (res){
-                    _this.$message({
-                        message:res.data.data
-                    })
+                    if(res.data.flag) {
+                        _this.$message({
+                            type:"success",
+                            message: res.data.data
+                        })
+                    }else{
+                        _this.$message({
+                            type:"error",
+                            message:"签到失败，请尝试刷新页面"
+                        })
+                    }
                 })
             }
         }

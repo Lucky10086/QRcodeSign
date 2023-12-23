@@ -13,6 +13,7 @@ public interface SignService extends IService<Sign> {
 
     Boolean updateSigned(String sno);
 
-    boolean trySign(String sno, String signedIPAddress);
+    boolean trySign(String sno, String sclass, String ipAddress);
 
+    void resetStatusAndIpWhenAbortSign(String sclass);
 }

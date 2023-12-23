@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * @author zjy
  */
+
 @Component
 public class MyInterceptor implements HandlerInterceptor {
     private final SignService signService;

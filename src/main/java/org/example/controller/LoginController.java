@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author zjy
  */
+
 @RestController
 //表示所有类都会返回JSON格式  spring的一个注解
 @RequestMapping("/authorizations")

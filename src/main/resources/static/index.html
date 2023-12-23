@@ -48,12 +48,12 @@
           alert("请准确输入账户密码，账户密码不得为空！")
         }else{
           var _this = this;
-          var u = 'http://192.168.137.1:8080/authorizations/'+ _this.teacher.account + '/' + _this.teacher.password;
+          var u = 'http://192.168.189.119:8080/authorizations/'+ _this.teacher.account + '/' + _this.teacher.password;
           console.log(u)
           if(this.teacher.account != null && this.teacher.password != null)
             axios({
               method:'post',
-              url:"http://192.168.137.1:8080/authorizations/login",
+              url:"http://192.168.189.119:8080/authorizations/login",
               data: _this.teacher
             }).then(function (res){
               if(res.data.flag == false){
@@ -61,7 +61,7 @@
               }
               else{
                 // alert("登陆成功！")
-                document.location.href = 'http://192.168.137.1:8080/manage.html'
+                document.location.href = 'http://192.168.189.119:8080/manage.html'
               }
             })
         }
