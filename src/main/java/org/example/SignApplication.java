@@ -21,14 +21,15 @@ public class SignApplication implements ApplicationContextAware {
         SpringApplication.run(SignApplication.class, args);
     }
 
+
+    //防止程序异常结束后,签到表存在脏数据情况
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         SignService bean = applicationContext.getBean(SignService.class);
-        if(bean.count() <= 0) return;
+        if(bean.count() <= 0) {return;}
         Sign clearIpAddress = new Sign();
         clearIpAddress.setIp("");
         clearIpAddress.setStatus("");
         bean.update(clearIpAddress,new UpdateWrapper<Sign>().ne("id","-1"));
-
     }
 }

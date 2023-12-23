@@ -42,7 +42,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    //get方法请求参数包括账户和密码，/authorizations/{account}/{password}
+    //Post方法请求参数包括账户和密码，/authorizations/{account}/{password}
     public Result login(@RequestBody Teacher teacher) {
         if (teacher != null) {
             Teacher one = service.getOne(new LambdaQueryWrapper<Teacher>()
